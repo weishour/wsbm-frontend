@@ -1,0 +1,202 @@
+<!-- 加载栏 -->
+<ws-loading-bar></ws-loading-bar>
+
+<!-- 导航 -->
+<ws-vertical-navigation
+  class="bg-gray-900 dark print:hidden"
+  [appearance]="'compact'"
+  [mode]="isScreenSmall ? 'over' : 'side'"
+  [name]="name"
+  [navigation]="navigation.compact"
+  [opened]="!isScreenSmall"
+>
+  <!-- 导航头部钩子 -->
+  <ng-container wsVerticalNavigationHeader>
+    <!-- logo -->
+    <div class="flex items-center justify-center h-20 mt-3 mb-4">
+      <ws-logo class="w-10"></ws-logo>
+    </div>
+    <ws-vertical-navigation-basic-item
+      [item]="homeItem"
+      [name]="name"
+    ></ws-vertical-navigation-basic-item>
+  </ng-container>
+  <!-- 导航内容尾部钩子 -->
+  <ng-container wsVerticalNavigationContentFooter>
+    <ws-vertical-navigation-basic-item
+      #addItemMenu
+      [item]="addItem"
+      [name]="name"
+    ></ws-vertical-navigation-basic-item>
+  </ng-container>
+  <!-- 导航尾部钩子 -->
+  <ng-container wsVerticalNavigationFooter>
+    <ws-vertical-navigation-divider-item
+      [item]="{ type: 'divider' }"
+      [name]="name"
+    ></ws-vertical-navigation-divider-item>
+    <ws-vertical-navigation-basic-item
+      [item]="settingsItem"
+      [name]="name"
+    ></ws-vertical-navigation-basic-item>
+  </ng-container>
+</ws-vertical-navigation>
+
+<!-- 包装 -->
+<div class="flex flex-col flex-auto w-full min-w-0">
+  <ng-container *transloco="let t; read: 'header'">
+    <!-- 头部 -->
+    <div
+      class="relative flex items-center w-full h-12 px-2 shadow flex-0 z-49 dark:shadow-none dark:border-b bg-card dark:bg-transparent print:hidden"
+    >
+      <!-- 导航切换按钮 -->
+      <button
+        mat-icon-button
+        [matTooltip]="t(toggleNavigationTooltip)"
+        (click)="toggleNavigation(name)"
+      >
+        <mat-icon [svgIcon]="toggleNavigationIcon"></mat-icon>
+      </button>
+      <!-- 组件 -->
+      <div class="flex items-center pl-2 ml-auto space-x-0.5 sm:space-x-2">
+        <search [appearance]="'bar'"></search>
+        <ws-fullscreen class="hidden md:block"></ws-fullscreen>
+        <schemes></schemes>
+        <languages></languages>
+        <user></user>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- 内容 -->
+  <div class="flex flex-col flex-auto ws-content">
+    <!-- *ngIf="true"需要在这里放置为了router-outlet正常工作。否则，布局的改变将不会被注册，视图也不会被更新! -->
+    <router-outlet *ngIf="true"></router-outlet>
+  </div>
+</div>
+
+<!-- 分类菜单右键选项 -->
+<ejs-contextmenu
+  #menuContextmenu
+  [target]="menuContextmenuTarget"
+  [animationSettings]="{ effect: 'FadeIn' }"
+  (select)="contextMenuSelect($event)"
+  (beforeOpen)="contextMenubeforeOpen($event)"
+></ejs-contextmenu>
+
+<!-- 添加分类菜单弹窗 -->
+<ejs-dialog
+  #addItemDialog
+  height="190px"
+  width="300px"
+  target=".ws-content"
+  [visible]="false"
+  [showCloseIcon]="true"
+  [animationSettings]="{ effect: 'FlipYRight' }"
+  (close)="addItemDialogClose()"
+>
+  <ng-template #header>
+    <div class="text-white">添加分类</div>
+  </ng-template>
+  <ng-template #content>
+    <form class="ws-form" [formGroup]="classifyForm">
+      <div class="grid grid-cols-4 gap-2 mt-2">
+        <span class="text-base leading-8">图标：</span>
+        <ejs-dropdownlist
+          [dataSource]="iconsDatas"
+          [fields]="{ text: 'name', value: 'value' }"
+          [allowFiltering]="true"
+          popupHeight="170px"
+          placeholder="请选择图标"
+          (filtering)="onFiltering($event)"
+          filterBarPlaceholder="筛选"
+          class="col-span-3"
+          formControlName="icon"
+        >
+          <ng-template #itemTemplate let-icon>
+            <div class="grid grid-cols-4 gap-4">
+              <div class="mt-2">
+                <mat-icon class="icon-size-5" svgIcon="{{ icon.value }}"></mat-icon>
+              </div>
+              <div class="col-span-3 mt-1">
+                <span class="text-base">{{ icon.name }}</span>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template #valueTemplate let-icon>
+            <div class="mt-1">
+              <mat-icon class="icon-size-5" svgIcon="{{ icon.value }}"></mat-icon>
+            </div>
+          </ng-template>
+        </ejs-dropdownlist>
+        <span class="text-base leading-8">名称：</span>
+        <input
+          type="text"
+          class="col-span-3 e-input"
+          placeholder="请输入名称"
+          maxlength="4"
+          formControlName="title"
+        />
+      </div>
+    </form>
+  </ng-template>
+</ejs-dialog>
+
+<!-- 修改分类菜单弹窗 -->
+<ejs-dialog
+  #editItemDialog
+  height="190px"
+  width="300px"
+  target=".ws-content"
+  [visible]="false"
+  [showCloseIcon]="true"
+  [animationSettings]="{ effect: 'FlipYRight' }"
+  (open)="editItemDialogOpen($event)"
+  (close)="editItemDialogClose()"
+>
+  <ng-template #header>
+    <div class="text-white">修改分类</div>
+  </ng-template>
+  <ng-template #content>
+    <form class="ws-form" [formGroup]="classifyForm">
+      <div class="grid grid-cols-4 gap-2 mt-2">
+        <span class="text-base leading-8">图标：</span>
+        <ejs-dropdownlist
+          [dataSource]="iconsDatas"
+          [fields]="{ text: 'name', value: 'value' }"
+          [allowFiltering]="true"
+          popupHeight="170px"
+          placeholder="请选择图标"
+          (filtering)="onFiltering($event)"
+          filterBarPlaceholder="筛选"
+          class="col-span-3"
+          formControlName="icon"
+        >
+          <ng-template #itemTemplate let-icon>
+            <div class="grid grid-cols-4 gap-4">
+              <div class="mt-2">
+                <mat-icon class="icon-size-5" svgIcon="{{ icon.value }}"></mat-icon>
+              </div>
+              <div class="col-span-3 mt-1">
+                <span class="text-base">{{ icon.name }}</span>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template #valueTemplate let-icon>
+            <div class="mt-1">
+              <mat-icon class="icon-size-5" svgIcon="{{ icon.value }}"></mat-icon>
+            </div>
+          </ng-template>
+        </ejs-dropdownlist>
+        <span class="text-base leading-8">名称：</span>
+        <input
+          type="text"
+          class="col-span-3 e-input"
+          placeholder="请输入名称"
+          maxlength="4"
+          formControlName="title"
+        />
+      </div>
+    </form>
+  </ng-template>
+</ejs-dialog>

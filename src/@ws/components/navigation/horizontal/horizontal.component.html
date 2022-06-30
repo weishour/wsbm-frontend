@@ -1,0 +1,35 @@
+<div class="ws-horizontal-navigation-wrapper">
+  <ng-container *ngFor="let item of navigation; trackBy: trackByFn">
+    <!-- 跳过隐藏导航项 -->
+    <ng-container *ngIf="(item.hidden && !item.hidden(item)) || !item.hidden">
+      <!-- Basic -->
+      <ng-container *ngIf="item.type === 'basic'">
+        <ws-horizontal-navigation-basic-item
+          class="ws-horizontal-navigation-menu-item"
+          [item]="item"
+          [name]="name"
+        ></ws-horizontal-navigation-basic-item>
+      </ng-container>
+
+      <!-- 分支:侧边，可折叠，组 -->
+      <ng-container
+        *ngIf="item.type === 'aside' || item.type === 'collapsable' || item.type === 'group'"
+      >
+        <ws-horizontal-navigation-branch-item
+          class="ws-horizontal-navigation-menu-item"
+          [item]="item"
+          [name]="name"
+        ></ws-horizontal-navigation-branch-item>
+      </ng-container>
+
+      <!-- 间隔 -->
+      <ng-container *ngIf="item.type === 'spacer'">
+        <ws-horizontal-navigation-spacer-item
+          class="ws-horizontal-navigation-menu-item"
+          [item]="item"
+          [name]="name"
+        ></ws-horizontal-navigation-spacer-item>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</div>

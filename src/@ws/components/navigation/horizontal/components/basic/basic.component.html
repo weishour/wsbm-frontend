@@ -1,0 +1,136 @@
+<!-- 导航项包装 -->
+<div
+  class="ws-horizontal-navigation-item-wrapper"
+  [class.ws-horizontal-navigation-item-has-subtitle]="!!item.subtitle"
+  [ngClass]="item.classes?.wrapper"
+>
+  <!-- 具有内部链接的导航项 -->
+  <ng-container *ngIf="item.link && !item.externalLink && !item.function && !item.disabled">
+    <div
+      class="ws-horizontal-navigation-item"
+      [ngClass]="{ 'ws-horizontal-navigation-item-active-forced': item.active }"
+      [routerLink]="[item.link]"
+      [fragment]="item.fragment ?? null"
+      [preserveFragment]="item.preserveFragment ?? false"
+      [queryParams]="item.queryParams ?? null"
+      [queryParamsHandling]="item.queryParamsHandling ?? null"
+      [routerLinkActive]="'ws-horizontal-navigation-item-active'"
+      [routerLinkActiveOptions]="isActiveMatchOptions"
+      [matTooltip]="item.tooltip || ''"
+    >
+      <ng-container *ngTemplateOutlet="itemTemplate"></ng-container>
+    </div>
+  </ng-container>
+
+  <!-- 具有外部链接的导航项 -->
+  <ng-container *ngIf="item.link && item.externalLink && !item.function && !item.disabled">
+    <a
+      class="ws-horizontal-navigation-item"
+      [href]="item.link"
+      [target]="item.target || '_self'"
+      [matTooltip]="item.tooltip || ''"
+    >
+      <ng-container *ngTemplateOutlet="itemTemplate"></ng-container>
+    </a>
+  </ng-container>
+
+  <!-- 具有功能的导航项 -->
+  <ng-container *ngIf="!item.link && item.function && !item.disabled">
+    <div
+      class="ws-horizontal-navigation-item"
+      [ngClass]="{ 'ws-horizontal-navigation-item-active-forced': item.active }"
+      [matTooltip]="item.tooltip || ''"
+      (click)="item.function($event, item)"
+    >
+      <ng-container *ngTemplateOutlet="itemTemplate"></ng-container>
+    </div>
+  </ng-container>
+
+  <!-- 具有内部链接和功能的导航项 -->
+  <ng-container *ngIf="item.link && !item.externalLink && item.function && !item.disabled">
+    <div
+      class="ws-horizontal-navigation-item"
+      [ngClass]="{ 'ws-horizontal-navigation-item-active-forced': item.active }"
+      [routerLink]="[item.link]"
+      [fragment]="item.fragment ?? null"
+      [preserveFragment]="item.preserveFragment ?? false"
+      [queryParams]="item.queryParams ?? null"
+      [queryParamsHandling]="item.queryParamsHandling ?? null"
+      [routerLinkActive]="'ws-horizontal-navigation-item-active'"
+      [routerLinkActiveOptions]="isActiveMatchOptions"
+      [matTooltip]="item.tooltip || ''"
+      (click)="item.function($event, item)"
+    >
+      <ng-container *ngTemplateOutlet="itemTemplate"></ng-container>
+    </div>
+  </ng-container>
+
+  <!-- 具有外部链接和功能的导航项 -->
+  <ng-container *ngIf="item.link && item.externalLink && item.function && !item.disabled">
+    <a
+      class="ws-horizontal-navigation-item"
+      [href]="item.link"
+      [target]="item.target || '_self'"
+      [matTooltip]="item.tooltip || ''"
+      (click)="item.function($event, item)"
+      mat-menu-item
+    >
+      <ng-container *ngTemplateOutlet="itemTemplate"></ng-container>
+    </a>
+  </ng-container>
+
+  <!-- 没有链接和功能的导航项 -->
+  <ng-container *ngIf="!item.link && !item.function && !item.disabled">
+    <div
+      class="ws-horizontal-navigation-item"
+      [ngClass]="{ 'ws-horizontal-navigation-item-active-forced': item.active }"
+      [matTooltip]="item.tooltip || ''"
+    >
+      <ng-container *ngTemplateOutlet="itemTemplate"></ng-container>
+    </div>
+  </ng-container>
+
+  <!-- 导航项禁用 -->
+  <ng-container *ngIf="item.disabled">
+    <div class="ws-horizontal-navigation-item ws-horizontal-navigation-item-disabled">
+      <ng-container *ngTemplateOutlet="itemTemplate"></ng-container>
+    </div>
+  </ng-container>
+</div>
+
+<!-- 导航项模板 -->
+<ng-template #itemTemplate>
+  <!-- 图标 -->
+  <ng-container *ngIf="item.icon">
+    <mat-icon
+      class="ws-horizontal-navigation-item-icon"
+      [ngClass]="item.classes?.icon"
+      [svgIcon]="item.icon"
+    ></mat-icon>
+  </ng-container>
+
+  <!-- 标题 & 副标题 -->
+  <div class="ws-horizontal-navigation-item-title-wrapper">
+    <div class="ws-horizontal-navigation-item-title">
+      <span [ngClass]="item.classes?.title">
+        {{ item.title }}
+      </span>
+    </div>
+    <ng-container *ngIf="item.subtitle">
+      <div class="ws-horizontal-navigation-item-subtitle text-hint">
+        <span [ngClass]="item.classes?.subtitle">
+          {{ item.subtitle }}
+        </span>
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- 徽章 -->
+  <ng-container *ngIf="item.badge">
+    <div class="ws-horizontal-navigation-item-badge">
+      <div class="ws-horizontal-navigation-item-badge-content" [ngClass]="item.badge.classes">
+        {{ item.badge.title }}
+      </div>
+    </div>
+  </ng-container>
+</ng-template>

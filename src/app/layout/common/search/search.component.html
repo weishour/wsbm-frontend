@@ -1,0 +1,188 @@
+<ng-container *transloco="let t; read: 'header'">
+  <!-- 搜索栏 -->
+  <ng-container *ngIf="appearance === 'bar'">
+    <button mat-icon-button *ngIf="!opened" [matTooltip]="t('search')" (click)="open()">
+      <mat-icon [svgIcon]="'heroicons_outline:search'"></mat-icon>
+    </button>
+    <div
+      class="absolute inset-0 flex items-center shrink-0 z-99 bg-card"
+      *ngIf="opened"
+      @slideInTop
+      @slideOutTop
+    >
+      <mat-icon class="absolute ml-6 sm:ml-8" [svgIcon]="'heroicons_outline:search'"></mat-icon>
+      <input
+        class="w-full h-full px-16 sm:px-18"
+        [formControl]="searchControl"
+        [matAutocomplete]="matAutocomplete"
+        [placeholder]="'Search...'"
+        (keydown)="onKeydown($event)"
+        #barSearchInput
+      />
+      <mat-autocomplete
+        class="border-t rounded-b shadow-md max-h-128 sm:px-2"
+        [autoSelectActiveOption]="true"
+        [disableRipple]="true"
+        #matAutocomplete="matAutocomplete"
+      >
+        <mat-option
+          class="px-6 py-0 bg-transparent pointer-events-none text-md text-secondary"
+          *ngIf="resultSets && !resultSets.length"
+        >
+          No results found!
+        </mat-option>
+        <ng-container *ngFor="let resultSet of resultSets; trackBy: trackByFn">
+          <mat-optgroup class="flex items-center px-2 mt-2">
+            <span class="text-sm font-semibold tracking-wider text-secondary">{{
+              resultSet.label.toUpperCase()
+            }}</span>
+          </mat-optgroup>
+          <ng-container *ngFor="let result of resultSet.results; trackBy: trackByFn">
+            <mat-option
+              class="relative px-6 py-0 mb-1 rounded-md group text-md hover:bg-gray-100 dark:hover:bg-hover"
+              [routerLink]="result.link"
+              [value]="result.value"
+            >
+              <!-- 联系人 -->
+              <ng-container *ngIf="resultSet.id === 'contacts'">
+                <ng-container
+                  *ngTemplateOutlet="contactResult; context: { $implicit: result }"
+                ></ng-container>
+              </ng-container>
+              <!-- 页面 -->
+              <ng-container *ngIf="resultSet.id === 'pages'">
+                <ng-container
+                  *ngTemplateOutlet="pageResult; context: { $implicit: result }"
+                ></ng-container>
+              </ng-container>
+              <!-- 任务 -->
+              <ng-container *ngIf="resultSet.id === 'tasks'">
+                <ng-container
+                  *ngTemplateOutlet="taskResult; context: { $implicit: result }"
+                ></ng-container>
+              </ng-container>
+            </mat-option>
+          </ng-container>
+        </ng-container>
+      </mat-autocomplete>
+      <button
+        class="absolute w-10 h-10 -mt-5 top-1/2 right-5 sm:right-7 shrink-0"
+        mat-icon-button
+        (click)="close()"
+      >
+        <mat-icon [svgIcon]="'heroicons_outline:x'"></mat-icon>
+      </button>
+    </div>
+  </ng-container>
+
+  <!-- 基本搜索 -->
+  <ng-container *ngIf="appearance === 'basic'">
+    <div class="w-full sm:min-w-80">
+      <mat-form-field class="w-full ws-mat-no-subscript">
+        <mat-icon matPrefix [svgIcon]="'heroicons_outline:search'"></mat-icon>
+        <input
+          matInput
+          [formControl]="searchControl"
+          [matAutocomplete]="matAutocomplete"
+          [placeholder]="'Search...'"
+          (keydown)="onKeydown($event)"
+        />
+      </mat-form-field>
+      <mat-autocomplete
+        class="mt-1 rounded max-h-128"
+        [autoSelectActiveOption]="true"
+        [disableRipple]="true"
+        #matAutocomplete="matAutocomplete"
+      >
+        <mat-option
+          class="px-6 py-0 bg-transparent pointer-events-none text-md text-secondary"
+          *ngIf="resultSets && !resultSets.length"
+        >
+          No results found!
+        </mat-option>
+        <ng-container *ngFor="let resultSet of resultSets; trackBy: trackByFn">
+          <mat-optgroup class="flex items-center px-2 mt-2">
+            <span class="text-sm font-semibold tracking-wider text-secondary">{{
+              resultSet.label.toUpperCase()
+            }}</span>
+          </mat-optgroup>
+          <ng-container *ngFor="let result of resultSet.results; trackBy: trackByFn">
+            <mat-option
+              class="relative px-6 py-0 mb-1 rounded-md group text-md hover:bg-gray-100 dark:hover:bg-hover"
+              [routerLink]="result.link"
+              [value]="result.value"
+            >
+              <!-- 联系人 -->
+              <ng-container *ngIf="resultSet.id === 'contacts'">
+                <ng-container
+                  *ngTemplateOutlet="contactResult; context: { $implicit: result }"
+                ></ng-container>
+              </ng-container>
+              <!-- 页面 -->
+              <ng-container *ngIf="resultSet.id === 'pages'">
+                <ng-container
+                  *ngTemplateOutlet="pageResult; context: { $implicit: result }"
+                ></ng-container>
+              </ng-container>
+              <!-- 任务 -->
+              <ng-container *ngIf="resultSet.id === 'tasks'">
+                <ng-container
+                  *ngTemplateOutlet="taskResult; context: { $implicit: result }"
+                ></ng-container>
+              </ng-container>
+            </mat-option>
+          </ng-container>
+        </ng-container>
+      </mat-autocomplete>
+    </div>
+  </ng-container>
+
+  <!-- 联系人结果模板 -->
+  <ng-template #contactResult let-result>
+    <div class="flex items-center">
+      <div
+        class="flex items-center justify-center w-8 h-8 overflow-hidden rounded-full shrink-0 bg-primary-100 dark:bg-primary-800"
+      >
+        <img *ngIf="result.avatar" [src]="result.avatar" />
+        <mat-icon
+          class="m-0 icon-size-5 text-primary dark:text-primary-400"
+          *ngIf="!result.avatar"
+          [svgIcon]="'heroicons_outline:user-circle'"
+        ></mat-icon>
+      </div>
+      <div class="ml-3 truncate">
+        <span [innerHTML]="result.name"></span>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- 页面结果模板 -->
+  <ng-template #pageResult let-result>
+    <div class="flex flex-col">
+      <div class="leading-normal truncate" [innerHTML]="result.title"></div>
+      <div class="text-sm leading-normal truncate text-secondary">
+        {{ result.link }}
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- 任务结果模板 -->
+  <ng-template #taskResult let-result>
+    <div class="flex items-center">
+      <ng-container *ngIf="result.completed">
+        <mat-icon
+          class="mr-0 text-primary dark:text-primary-400"
+          [svgIcon]="'heroicons_outline:check-circle'"
+        ></mat-icon>
+      </ng-container>
+      <ng-container *ngIf="!result.completed">
+        <mat-icon class="mr-0 text-hint" [svgIcon]="'heroicons_outline:check-circle'"></mat-icon>
+      </ng-container>
+      <div
+        class="ml-3 leading-normal truncate"
+        [ngClass]="{ 'line-through text-hint': result.completed }"
+        [innerHTML]="result.title"
+      ></div>
+    </div>
+  </ng-template>
+</ng-container>

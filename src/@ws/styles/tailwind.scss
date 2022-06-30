@@ -1,0 +1,140 @@
+/* 这将注入Tailwind的基本样式和插件注册的任何基本样式 */
+@tailwind base;
+
+/* 这将为Tailwind的基本样式层注入额外的样式 */
+@layer base {
+  * {
+    /* 文本渲染 */
+    text-rendering: optimizeLegibility;
+    -o-text-rendering: optimizeLegibility;
+    -ms-text-rendering: optimizeLegibility;
+    -moz-text-rendering: optimizeLegibility;
+    -webkit-text-rendering: optimizeLegibility;
+    -webkit-tap-highlight-color: transparent;
+
+    /* Remove the focus ring */
+    &:focus {
+      outline: none !important;
+    }
+  }
+
+  /* HTML和Body默认样式 */
+  html,
+  body {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    width: 100%;
+    min-height: 100%;
+    -webkit-font-smoothing: auto;
+    -moz-osx-font-smoothing: auto;
+  }
+
+  /* 字体大小 */
+  html {
+    font-size: 16px;
+  }
+
+  body {
+    font-size: 0.875rem;
+  }
+
+  /* Stylistic alternates for Inter */
+  body {
+    font-feature-settings: 'salt';
+  }
+
+  /* 更好的间距和边界水平规则 */
+  hr {
+    margin: 32px 0;
+    border-bottom-width: 1px;
+  }
+
+  /* 让图片和视频占据所有可用的空间 */
+  img {
+    width: 100%;
+    vertical-align: top;
+  }
+
+  /* 修复:禁用占位符颜色在Safari上太淡 */
+  input[disabled] {
+    opacity: 1;
+    -webkit-text-fill-color: currentColor;
+  }
+
+  body,
+  .dark,
+  .light {
+    @apply text-default bg-default #{'!important'};
+  }
+
+  *,
+  *::before,
+  *::after {
+    --tw-border-opacity: 1 !important;
+    border-color: rgba(var(--ws-border-rgb), var(--tw-border-opacity));
+
+    .dark & {
+      --tw-border-opacity: 0.12 !important;
+    }
+  }
+
+  /* 在MacOS和iOS以外的平台上样式滚动条 */
+  @media only screen and (min-width: 960px) {
+    body:not(.os-mac) {
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+        background-color: rgba(0, 0, 0, 0);
+      }
+
+      ::-webkit-scrollbar:hover {
+        width: 8px;
+        height: 8px;
+        background-color: rgba(0, 0, 0, 0.06);
+      }
+
+      ::-webkit-scrollbar-thumb {
+        border: 2px solid transparent;
+        border-radius: 20px;
+        box-shadow: inset 0 0 0 20px rgba(0, 0, 0, 0.24);
+      }
+
+      ::-webkit-scrollbar-thumb:active {
+        border-radius: 20px;
+        box-shadow: inset 0 0 0 20px rgba(0, 0, 0, 0.37);
+      }
+
+      &.dark {
+        ::-webkit-scrollbar-thumb {
+          box-shadow: inset 0 0 0 20px rgba(255, 255, 255, 0.24);
+        }
+
+        ::-webkit-scrollbar-thumb:active {
+          box-shadow: inset 0 0 0 20px rgba(255, 255, 255, 0.37);
+        }
+      }
+    }
+  }
+
+  [disabled] * {
+    @apply text-disabled #{'!important'};
+  }
+
+  /* 打印样式 */
+  @media print {
+    /* 将打印时的基本字体大小缩小，这样就可以很好地缩放 */
+    html {
+      font-size: 12px !important;
+    }
+
+    body,
+    .dark,
+    .light {
+      background: none !important;
+    }
+  }
+}
+
+/* 这会注入Tailwind的组件类和任何插件注册的组件类 */
+@tailwind components;

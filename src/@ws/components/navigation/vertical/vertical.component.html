@@ -1,0 +1,122 @@
+<div class="ws-vertical-navigation-wrapper">
+  <!-- 头部 -->
+  <div class="ws-vertical-navigation-header">
+    <ng-content select="[wsVerticalNavigationHeader]"></ng-content>
+  </div>
+
+  <!-- 内容 -->
+  <div
+    class="ws-vertical-navigation-content"
+    wsScrollbar
+    [wsScrollbarOptions]="{ wheelPropagation: inner, suppressScrollX: true }"
+    #navigationContent
+    cdkDropList
+    (cdkDropListDropped)="basicItemDrop($event)"
+  >
+    <!-- 内容头部 -->
+    <div class="ws-vertical-navigation-content-header">
+      <ng-content select="[wsVerticalNavigationContentHeader]"></ng-content>
+    </div>
+
+    <!-- 明细 -->
+    <ng-container *ngFor="let item of navigation; trackBy: trackByFn">
+      <!-- 跳过隐藏项 -->
+      <ng-container *ngIf="(item.hidden && !item.hidden(item)) || !item.hidden">
+        <!-- 侧边 -->
+        <ng-container *ngIf="item.type === 'aside'">
+          <ws-vertical-navigation-aside-item
+            [item]="item"
+            [name]="name"
+            [activeItemId]="activeAsideItemId"
+            [autoCollapse]="autoCollapse"
+            [skipChildren]="true"
+            (click)="toggleAside(item)"
+          ></ws-vertical-navigation-aside-item>
+        </ng-container>
+
+        <!-- 基本 -->
+        <ng-container *ngIf="item.type === 'basic'">
+          <ws-vertical-navigation-basic-item
+            [item]="item"
+            [name]="name"
+            cdkDrag
+            cdkDragLockAxis="y"
+            cdkDragBoundary=".ws-vertical-navigation-content"
+          ></ws-vertical-navigation-basic-item>
+        </ng-container>
+
+        <!-- 折叠 -->
+        <ng-container *ngIf="item.type === 'collapsable'">
+          <ws-vertical-navigation-collapsable-item
+            [item]="item"
+            [name]="name"
+            [autoCollapse]="autoCollapse"
+          ></ws-vertical-navigation-collapsable-item>
+        </ng-container>
+
+        <!-- 分割线 -->
+        <ng-container *ngIf="item.type === 'divider'">
+          <ws-vertical-navigation-divider-item
+            [item]="item"
+            [name]="name"
+          ></ws-vertical-navigation-divider-item>
+        </ng-container>
+
+        <!-- 分组 -->
+        <ng-container *ngIf="item.type === 'group'">
+          <ws-vertical-navigation-group-item
+            [item]="item"
+            [name]="name"
+            [autoCollapse]="autoCollapse"
+          ></ws-vertical-navigation-group-item>
+        </ng-container>
+
+        <!-- 间隔 -->
+        <ng-container *ngIf="item.type === 'spacer'">
+          <ws-vertical-navigation-spacer-item
+            [item]="item"
+            [name]="name"
+          ></ws-vertical-navigation-spacer-item>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+
+    <!-- 内容尾部 -->
+    <div class="ws-vertical-navigation-content-footer">
+      <ng-content select="[wsVerticalNavigationContentFooter]"></ng-content>
+    </div>
+  </div>
+
+  <!-- 尾部 -->
+  <div class="ws-vertical-navigation-footer">
+    <ng-content select="[wsVerticalNavigationFooter]"></ng-content>
+  </div>
+</div>
+
+<!-- 侧边 -->
+<ng-container *ngIf="activeAsideItemId">
+  <div
+    class="ws-vertical-navigation-aside-wrapper"
+    wsScrollbar
+    [wsScrollbarOptions]="{ wheelPropagation: false, suppressScrollX: true }"
+    [@fadeInLeft]="position === 'left'"
+    [@fadeInRight]="position === 'right'"
+    [@fadeOutLeft]="position === 'left'"
+    [@fadeOutRight]="position === 'right'"
+  >
+    <!-- 明细 -->
+    <ng-container *ngFor="let item of navigation; trackBy: trackByFn">
+      <!-- 跳过隐藏项 -->
+      <ng-container *ngIf="(item.hidden && !item.hidden(item)) || !item.hidden">
+        <!-- 侧边 -->
+        <ng-container *ngIf="item.type === 'aside' && item.id === activeAsideItemId">
+          <ws-vertical-navigation-aside-item
+            [item]="item"
+            [name]="name"
+            [autoCollapse]="autoCollapse"
+          ></ws-vertical-navigation-aside-item>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </div>
+</ng-container>

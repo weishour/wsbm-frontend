@@ -1,0 +1,25 @@
+layout {
+  display: flex;
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  /* 每个布局的基本样式 */
+  > * {
+    position: relative;
+    display: flex;
+    flex: 1 1 auto;
+    width: 100%;
+  }
+
+  /* 作为路由加载的组件的基本样式 */
+  router-outlet {
+    + * {
+      position: relative;
+      display: flex;
+      flex: 1 1 auto;
+      width: 100%;
+    }
+  }
+}

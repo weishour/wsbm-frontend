@@ -1,0 +1,183 @@
+<div
+  class="absolute inset-0 flex flex-col min-w-0"
+  wsScrollbar
+  [wsScrollbarOptions]="{ suppressScrollX: true }"
+>
+  <mat-drawer-container class="flex-auto h-full">
+    <!-- 抽屉 -->
+    <mat-drawer
+      #labelDrawer
+      class="w-120 dark:bg-gray-900"
+      [autoFocus]="false"
+      [mode]="'over'"
+      [opened]="false"
+      [position]="'end'"
+    >
+      <bookmark-label
+        [matDrawer]="labelDrawer"
+        [drawerLabelData]="drawerLabelData"
+        (addComplete)="addLabelComplete($event)"
+        (editComplete)="editLabelComplete($event)"
+      ></bookmark-label>
+    </mat-drawer>
+
+    <!-- 抽屉内容 -->
+    <mat-drawer-content class="flex flex-col">
+      <!-- 主页面 -->
+      <ng-container *ngIf="labelGroups && labelGroups.length > 0; else noLabelGroup">
+        <div class="flex-auto px-4" cdkDropList (cdkDropListDropped)="labelGroupDrop($event)">
+          <div class="label-groups">
+            <ng-container *ngFor="let labelGroup of labelGroups">
+              <ejs-accordion
+                #acrdnInstance
+                (expanding)="accordionExpanding($event)"
+                (clicked)="accordionClicked($event)"
+                class="my-4 bg-transparent rounded-lg drop-shadow"
+                cdkDrag
+                cdkDragLockAxis="y"
+                cdkDragBoundary=".label-groups"
+              >
+                <e-accordionitems>
+                  <e-accordionitem expanded="true" cssClass="bg-transparent">
+                    <ng-template #header>
+                      <div class="flex justify-between w-full cursor-move" cdkDragHandle>
+                        <span class="select-none text-primary dark:text-primary-400">
+                          {{ labelGroup.title }}
+                        </span>
+                        <div class="grid grid-cols-2 gap-2">
+                          <button
+                            mat-icon-button
+                            [matTooltip]="'修改分组'"
+                            class="w-6 h-6 top-1.5 min-h-6"
+                          >
+                            <mat-icon
+                              class="icon-size-5"
+                              [svgIcon]="'mat_solid:edit'"
+                              (click)="editGroup($event, labelGroup)"
+                            ></mat-icon>
+                          </button>
+                          <button
+                            mat-icon-button
+                            [matTooltip]="'删除分组'"
+                            class="w-6 h-6 top-1.5 min-h-6"
+                          >
+                            <mat-icon
+                              class="icon-size-5"
+                              [svgIcon]="'mat_solid:delete'"
+                              (click)="removeGroup($event, labelGroup)"
+                            ></mat-icon>
+                          </button>
+                        </div>
+                      </div>
+                    </ng-template>
+                    <ng-template #content>
+                      <div class="labels">
+                        <div class="flex flex-wrap content-evenly">
+                          <ng-container *ngFor="let label of labelGroup.labels">
+                            <ws-card
+                              class="flex w-full h-20 m-2 transition-shadow duration-150 ease-in-out shadow-sm cursor-pointer label-card group max-w-50 hover:shadow-md hover:bg-hover"
+                              matRipple
+                              (click)="navigationService.goToNewTab(label.address)"
+                              (contextmenu)="onLabelContextMenu($event, label)"
+                            >
+                              <img
+                                class="object-cover w-20"
+                                src="{{ fileUrl + label.iconName }}"
+                                alt="Card cover image"
+                                crossorigin
+                              />
+                              <div class="flex flex-col justify-center flex-auto px-2 py-4 w-30">
+                                <div
+                                  class="text-lg font-semibold leading-tight truncate select-none group-hover:text-primary"
+                                  [tippy]="label.title"
+                                  [onlyTextOverflow]="true"
+                                  [maxWidth]="240"
+                                  placement="top-start"
+                                >
+                                  {{ label.title }}
+                                </div>
+                                <div
+                                  class="mt-1 truncate select-none text-secondary"
+                                  [tippy]="label.description"
+                                  [onlyTextOverflow]="true"
+                                  [maxWidth]="240"
+                                  placement="bottom-start"
+                                >
+                                  {{ label.description }}
+                                </div>
+                              </div>
+                            </ws-card>
+                          </ng-container>
+                          <div
+                            class="flex flex-col items-center justify-center h-20 m-2 transition-colors duration-150 ease-in-out border-2 border-gray-300 border-dashed cursor-pointer rounded-2xl w-50 hover:bg-hover"
+                            (click)="addLabel(labelGroup)"
+                          >
+                            <mat-icon
+                              class="icon-size-12 text-hint"
+                              [svgIcon]="'heroicons_outline:plus'"
+                            ></mat-icon>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-template>
+                  </e-accordionitem>
+                </e-accordionitems>
+              </ejs-accordion>
+            </ng-container>
+          </div>
+          <div
+            class="flex flex-col items-center justify-center w-full mb-4 transition-colors duration-150 ease-in-out border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:bg-hover"
+            (click)="addGroup()"
+          >
+            <mat-icon
+              class="icon-size-12 text-hint"
+              [svgIcon]="'heroicons_outline:plus'"
+            ></mat-icon>
+          </div>
+        </div>
+      </ng-container>
+    </mat-drawer-content>
+  </mat-drawer-container>
+</div>
+
+<!-- 标签右键选项 -->
+<ejs-contextmenu
+  #labelContextmenu
+  [target]="labelContextmenuTarget"
+  [animationSettings]="{ effect: 'FadeIn' }"
+  (select)="labelContextMenuSelect($event)"
+  (beforeOpen)="labelContextMenubeforeOpen($event)"
+></ejs-contextmenu>
+
+<!-- 无分组数据模板 -->
+<ng-template #noLabelGroup>
+  <div class="absolute inset-0">
+    <ng-container *transloco="let t; scope: 'error'">
+      <div class="flex flex-col items-center justify-center flex-auto h-full p-6 sm:p-10">
+        <div class="w-full max-w-3xl">
+          <lottie-player
+            autoplay
+            speed="3"
+            src="assets/json/lotties/not-data.json"
+            class="drop-shadow-md"
+            style="height: 400px"
+          >
+          </lottie-player>
+        </div>
+        <div
+          class="mt-4 text-lg font-medium tracking-tight text-center sm:mt-8 md:text-xl text-secondary"
+          [@fadeInLeft]="AY_50"
+        >
+          暂无分组数据
+        </div>
+        <button
+          class="mt-4 font-medium ws-buttom-hover1"
+          [@fadeInRight]="AY_50"
+          (click)="addGroup()"
+        >
+          添加分组
+        </button>
+      </div>
+    </ng-container>
+  </div>
+</ng-template>

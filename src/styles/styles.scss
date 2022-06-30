@@ -1,0 +1,21 @@
+/* ------------------------------------------------------------------------------ */
+/*  @ 在这里导入/编写您的自定义样式.
+/*  @ 此文件的样式将覆盖 'vendors.scss' and Ws的基本样式.
+/* ------------------------------------------------------------------------------ */
+
+:root {
+  // DevUI
+  --devui-border-radius: 4px; // 一般圆角
+
+  // HotToast
+  .hot-toast-bar-base-container {
+    --hot-toast-snackbar-bg: var(--ws-accent); // 背景深色
+  }
+
+  .ws-notification {
+    .hot-toast-message {
+      min-height: 76px;
+    }
+    --hot-toast-message-display: 'block';
+  }
+}

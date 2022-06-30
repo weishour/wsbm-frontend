@@ -1,0 +1,221 @@
+<div class="flex flex-col max-w-120">
+  <!-- 头部 -->
+  <div
+    class="flex items-center justify-between h-12 pl-6 pr-3 flex-0 sm:pr-4 sm:pl-6 bg-primary text-on-primary"
+  >
+    <div class="text-lg font-medium">{{ actionName }}标签</div>
+    <button mat-icon-button type="button" (click)="close()" [tabIndex]="-1">
+      <mat-icon class="text-current" svgIcon="heroicons_outline:x"></mat-icon>
+    </button>
+  </div>
+
+  <!-- 表单 -->
+  <form class="flex flex-col flex-auto px-6 py-3 overflow-y-auto" [formGroup]="labelForm">
+    <mat-form-field class="flex-auto w-full gt-xs:pr-3">
+      <mat-label>分组</mat-label>
+      <mat-select formControlName="groupId">
+        <mat-option *ngFor="let labelGroup of labelGroups" [value]="labelGroup.id">
+          {{ labelGroup.title }}
+        </mat-option>
+      </mat-select>
+      <mat-icon class="icon-size-5" matPrefix svgIcon="heroicons_outline:collection"></mat-icon>
+    </mat-form-field>
+
+    <mat-form-field class="w-full" [floatLabel]="'always'">
+      <mat-label>地址</mat-label>
+      <mat-icon
+        matPrefix
+        class="hidden sm:flex icon-size-5"
+        svgIcon="mat_outline:link"
+        [matTooltip]="'修改分组'"
+      ></mat-icon>
+      <input #address matInput formControlName="address" [placeholder]="'网站地址'" />
+      <mat-icon
+        matSuffix
+        class="hidden text-orange-500 sm:flex icon-size-5"
+        svgIcon="mat_outline:info"
+        [matTooltip]="'输入网址后会自动获取网站名称和图标，个别网站或国外网站可能会获取不成功'"
+      ></mat-icon>
+      <button
+        mat-button
+        matSuffix
+        class="p-2 rounded-md"
+        color="primary"
+        type="button"
+        (click)="getSiteInfo(address.value)"
+      >
+        一键获取
+      </button>
+    </mat-form-field>
+
+    <div class="flex flex-col">
+      <div class="text-base font-semibold">图标</div>
+      <div class="flex justify-between w-full py-2">
+        <div class="flex flex-col items-center">
+          <div
+            id="icon-image"
+            class="icon-image"
+            [class.border-primary]="labelForm.value.iconType === 'ws'"
+            (click)="iconChoose('ws')"
+          ></div>
+          <span class="mt-1 text-secondary">唯守</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <div
+            id="text-image"
+            class="text-image"
+            [class.border-primary]="labelForm.value.iconType === 'text'"
+            (click)="iconChoose('text')"
+          ></div>
+          <span class="mt-1 text-secondary">文字</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <file-pond
+            #filepond
+            name="filepond"
+            class="border-2 rounded-lg shadow cursor-pointer hover:border-primary"
+            [class.border-primary]="labelForm.value.iconType === 'upload'"
+            [options]="pondOptions"
+            (click)="iconChoose('upload')"
+          ></file-pond>
+          <span class="mt-1 text-secondary">上传</span>
+        </div>
+      </div>
+    </div>
+
+    <mat-form-field class="w-full" [class.hidden]="labelForm.value.iconType !== 'text'">
+      <mat-label>图标文字</mat-label>
+      <mat-icon
+        matPrefix
+        class="hidden sm:flex icon-size-5"
+        svgIcon="heroicons_outline:translate"
+      ></mat-icon>
+      <input
+        #iconTitle
+        matInput
+        formControlName="iconTitle"
+        [placeholder]="'图标文字'"
+        (input)="iconTitleEdit(iconTitle.value)"
+      />
+    </mat-form-field>
+
+    <div class="flex flex-col">
+      <div class="text-base font-semibold">背景颜色</div>
+      <div class="flex flex-col w-full py-2">
+        <div class="border rounded-md bg-card">
+          <input
+            ejs-colorpicker
+            type="color"
+            cssClass="ws-color-palette"
+            mode="Palette"
+            columns="9"
+            [value]="circleColor"
+            [inline]="true"
+            [noColor]="true"
+            [modeSwitcher]="false"
+            [showButtons]="false"
+            [presetColors]="paletteColors"
+            (change)="circleOnChange($event)"
+            (beforeTileRender)="circleTileRender($event)"
+          />
+          <input
+            ejs-colorpicker
+            type="color"
+            cssClass="ws-color-slider e-hide-value"
+            [value]="sliderColor"
+            [inline]="true"
+            [modeSwitcher]="false"
+            [showButtons]="false"
+            (change)="sliderOnChange($event)"
+          />
+        </div>
+      </div>
+    </div>
+
+    <mat-form-field class="w-full" [floatLabel]="'always'">
+      <mat-label>名称</mat-label>
+      <mat-icon
+        matPrefix
+        class="hidden sm:flex icon-size-5"
+        svgIcon="mat_solid:drive_file_rename_outline"
+      ></mat-icon>
+      <input matInput formControlName="title" [placeholder]="'网站名称'" />
+    </mat-form-field>
+
+    <mat-form-field class="w-full ws-mat-textarea" [floatLabel]="'always'">
+      <mat-label>描述</mat-label>
+      <mat-icon
+        matPrefix
+        class="hidden sm:flex icon-size-5"
+        svgIcon="heroicons_solid:menu-alt-2"
+      ></mat-icon>
+      <textarea
+        matInput
+        formControlName="description"
+        [placeholder]="'网站描述'"
+        [rows]="5"
+        [spellcheck]="false"
+        matTextareaAutosize
+      ></textarea>
+    </mat-form-field>
+
+    <!-- 操作 -->
+    <div class="flex flex-col justify-between mt-2 sm:flex-row sm:items-center sm:mt-2">
+      <div class="-ml-2"></div>
+      <div class="flex items-center">
+        <ng-container *ngIf="action == 'add'; then addActions; else editActions"></ng-container>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- 添加操作按钮 -->
+<ng-template #addActions>
+  <button
+    class="rounded-md sm:mx-3"
+    mat-flat-button
+    [color]="'primary'"
+    (click)="add(true)"
+    [disabled]="labelForm.disabled || loadingShow"
+    type="button"
+  >
+    <mat-icon svgIcon="heroicons_outline:check-circle"></mat-icon>
+    <span class="ml-2">{{ actionName }}继续</span>
+  </button>
+  <button
+    class="order-last rounded-md"
+    mat-stroked-button
+    [color]="'warn'"
+    (click)="add()"
+    [disabled]="labelForm.disabled || loadingShow"
+    type="button"
+  >
+    <mat-icon svgIcon="heroicons_outline:check"></mat-icon>
+    <span class="ml-2">{{ actionName }}关闭</span>
+  </button>
+</ng-template>
+
+<!-- 修改操作按钮 -->
+<ng-template #editActions>
+  <button
+    class="rounded-md sm:mx-3"
+    mat-flat-button
+    [color]="'primary'"
+    (click)="edit()"
+    [disabled]="labelForm.disabled || loadingShow"
+    type="button"
+  >
+    <mat-icon svgIcon="heroicons_outline:check"></mat-icon>
+    <span class="ml-2">修改</span>
+  </button>
+  <button
+    class="order-last rounded-md"
+    mat-stroked-button
+    [color]="'warn'"
+    (click)="cancel()"
+    type="button"
+  >
+    <mat-icon svgIcon="heroicons_outline:x"></mat-icon>
+    <span class="ml-2">取消</span>
+  </button>
+</ng-template>

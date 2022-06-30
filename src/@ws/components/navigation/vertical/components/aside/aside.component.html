@@ -1,0 +1,99 @@
+<div
+  class="ws-vertical-navigation-item-wrapper"
+  [class.ws-vertical-navigation-item-has-subtitle]="!!item.subtitle"
+  [ngClass]="item.classes?.wrapper"
+>
+  <div
+    class="ws-vertical-navigation-item"
+    [ngClass]="{
+      'ws-vertical-navigation-item-active': active,
+      'ws-vertical-navigation-item-disabled': item.disabled,
+      'ws-vertical-navigation-item-active-forced': item.active
+    }"
+    [matTooltip]="item.tooltip || ''"
+  >
+    <!-- 图标 -->
+    <ng-container *ngIf="item.icon">
+      <mat-icon
+        class="ws-vertical-navigation-item-icon"
+        [ngClass]="item.classes?.icon"
+        [svgIcon]="item.icon"
+      ></mat-icon>
+    </ng-container>
+
+    <!-- 标题 & 副标题 -->
+    <div class="ws-vertical-navigation-item-title-wrapper">
+      <div class="ws-vertical-navigation-item-title">
+        <span [ngClass]="item.classes?.title">
+          {{ item.title }}
+        </span>
+      </div>
+      <ng-container *ngIf="item.subtitle">
+        <div class="ws-vertical-navigation-item-subtitle">
+          <span [ngClass]="item.classes?.subtitle">
+            {{ item.subtitle }}
+          </span>
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- 徽章 -->
+    <ng-container *ngIf="item.badge">
+      <div class="ws-vertical-navigation-item-badge">
+        <div class="ws-vertical-navigation-item-badge-content" [ngClass]="item.badge.classes">
+          {{ item.badge.title }}
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<ng-container *ngIf="!skipChildren">
+  <div class="ws-vertical-navigation-item-children">
+    <ng-container *ngFor="let item of item.children; trackBy: trackByFn">
+      <!-- 跳过隐藏项 -->
+      <ng-container *ngIf="(item.hidden && !item.hidden(item)) || !item.hidden">
+        <!-- 基本 -->
+        <ng-container *ngIf="item.type === 'basic'">
+          <ws-vertical-navigation-basic-item
+            [item]="item"
+            [name]="name"
+          ></ws-vertical-navigation-basic-item>
+        </ng-container>
+
+        <!-- 折叠 -->
+        <ng-container *ngIf="item.type === 'collapsable'">
+          <ws-vertical-navigation-collapsable-item
+            [item]="item"
+            [name]="name"
+            [autoCollapse]="autoCollapse"
+          ></ws-vertical-navigation-collapsable-item>
+        </ng-container>
+
+        <!-- 分割线 -->
+        <ng-container *ngIf="item.type === 'divider'">
+          <ws-vertical-navigation-divider-item
+            [item]="item"
+            [name]="name"
+          ></ws-vertical-navigation-divider-item>
+        </ng-container>
+
+        <!-- 分组 -->
+        <ng-container *ngIf="item.type === 'group'">
+          <ws-vertical-navigation-group-item
+            [item]="item"
+            [name]="name"
+          ></ws-vertical-navigation-group-item>
+        </ng-container>
+
+        <!-- 间隔 -->
+        <ng-container *ngIf="item.type === 'spacer'">
+          <ws-vertical-navigation-spacer-item
+            [item]="item"
+            [name]="name"
+          ></ws-vertical-navigation-spacer-item>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </div>
+</ng-container>

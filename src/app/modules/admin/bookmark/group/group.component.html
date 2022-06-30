@@ -1,0 +1,46 @@
+<div class="flex flex-col max-h-screen -m-6 max-w-240 md:min-w-160">
+  <!-- 头部 -->
+  <div
+    class="flex items-center justify-between h-12 pl-6 pr-3 flex-0 sm:pr-4 sm:pl-6 bg-primary text-on-primary"
+  >
+    <div class="text-lg font-medium">{{ actionName }}分组</div>
+    <button mat-icon-button type="button" (click)="close()" [tabIndex]="-1">
+      <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'"></mat-icon>
+    </button>
+  </div>
+
+  <!-- 表单 -->
+  <form class="flex flex-col flex-auto px-6 py-3 overflow-y-auto" [formGroup]="groupForm">
+    <mat-form-field>
+      <mat-label>名称</mat-label>
+      <input matInput formControlName="title" />
+    </mat-form-field>
+
+    <!-- 操作 -->
+    <div class="flex flex-col justify-between mt-2 sm:flex-row sm:items-center sm:mt-2">
+      <div class="-ml-2"></div>
+      <div class="flex items-center">
+        <button
+          class="sm:mx-3"
+          mat-flat-button
+          [color]="'primary'"
+          (click)="action == 'add' ? add() : edit()"
+          [disabled]="groupForm.disabled"
+        >
+          <mat-icon [svgIcon]="'heroicons_outline:check'"></mat-icon>
+          <span class="ml-2">{{ actionName }}</span>
+        </button>
+        <button
+          class="order-last"
+          mat-stroked-button
+          [color]="'warn'"
+          (click)="cancel()"
+          type="button"
+        >
+          <mat-icon [svgIcon]="'heroicons_outline:x'"></mat-icon>
+          <span class="ml-2">取消</span>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

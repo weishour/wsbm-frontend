@@ -1,0 +1,47 @@
+<!-- ---------------------------------------------------------------------------- -->
+<!-- 空白布局 -->
+<!-- ---------------------------------------------------------------------------- -->
+<empty-layout *ngIf="layout === 'empty'"></empty-layout>
+
+<!-- ---------------------------------------------------------------------------- -->
+<!-- 水平导航布局 -->
+<!-- ---------------------------------------------------------------------------- -->
+
+<!-- 居中 -->
+<centered-layout *ngIf="layout === 'centered'"></centered-layout>
+
+<!-- 企业 -->
+<enterprise-layout *ngIf="layout === 'enterprise'"></enterprise-layout>
+
+<!-- 材料 -->
+<material-layout *ngIf="layout === 'material'"></material-layout>
+
+<!-- 现代 -->
+<modern-layout *ngIf="layout === 'modern'"></modern-layout>
+
+<!-- ---------------------------------------------------------------------------- -->
+<!-- 垂直导航布局 -->
+<!-- ---------------------------------------------------------------------------- -->
+
+<!-- 经典 -->
+<classic-layout *ngIf="layout === 'classic'"></classic-layout>
+
+<!-- 优雅 -->
+<classy-layout *ngIf="layout === 'classy'"></classy-layout>
+
+<!-- 简洁 -->
+<compact-layout *ngIf="layout === 'compact'"></compact-layout>
+
+<!-- 紧凑 -->
+<dense-layout *ngIf="layout === 'dense'"></dense-layout>
+
+<!-- 未来 -->
+<futuristic-layout *ngIf="layout === 'futuristic'"></futuristic-layout>
+
+<!-- 细小 -->
+<thin-layout *ngIf="layout === 'thin'"></thin-layout>
+
+<!-- ---------------------------------------------------------------------------- -->
+<!-- 设置抽屉-移除此按钮可移除抽屉及其按钮 -->
+<!-- ---------------------------------------------------------------------------- -->
+<settings [buttonHidden]="!showSetting"></settings>

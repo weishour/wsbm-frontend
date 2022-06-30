@@ -1,0 +1,14 @@
+<!-- 加载栏 -->
+<ws-loading-bar></ws-loading-bar>
+
+<!-- 包装 -->
+<div class="flex flex-col flex-auto w-full">
+
+    <!-- 内容 -->
+    <div class="flex flex-col flex-auto">
+        <!-- *ngIf="true"需要在这里放置为了router-outlet正常工作。
+             否则，布局的改变将不会被注册，视图也不会被更新! -->
+        <router-outlet *ngIf="true"></router-outlet>
+    </div>
+
+</div>

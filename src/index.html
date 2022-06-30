@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <title>唯守书签</title>
+    <meta charset="utf-8" />
+    <meta name="description" content="唯守书签" />
+    <meta name="keywords" content="唯守,书签" />
+    <meta name="author" content="WeiShour" />
+    <meta
+      name="viewport"
+      content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0"
+    />
+
+    <base href="/" />
+
+    <!-- 网站图标 -->
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicons/favicon-16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicons/favicon-32.png" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+    <!-- 字体 -->
+    <link href="assets/fonts/inter/inter.css" rel="stylesheet" />
+    <link href="assets/fonts/ibmplexmono/ibmplexmono.css" rel="stylesheet" />
+
+    <!-- 图标字体 -->
+    <link href="assets/fonts/materialicons/materialicons.css" rel="stylesheet" />
+
+    <!-- 闪屏样式 -->
+    <link href="assets/styles/splash-screen.css" rel="stylesheet" />
+
+    <!-- 全局loading样式 -->
+    <link href="assets/styles/loading.css" rel="stylesheet">
+
+    <!-- lottie-player -->
+    <script src="assets/js/lottie-player.js"></script>
+    <style class="syncfusion-theme"></style>
+  </head>
+
+  <body>
+    <!-- WS 初始屏幕 -->
+    <ws-splash-screen id="ws-splash-screen">
+      <div class="center">
+        <div class="logo">
+          <img width="300" src="assets/images/logo/weishour.svg" />
+        </div>
+        <div class="spinner-wrapper">
+          <div class="spinner">
+            <div class="inner">
+              <div class="gap"></div>
+              <div class="left">
+                <div class="half-circle"></div>
+              </div>
+              <div class="right">
+                <div class="half-circle"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ws-splash-screen>
+    <!-- / WS 初始屏幕 -->
+
+    <!-- 全局loading -->
+    <ws-loading id="ws-loading">
+      <div class="loading-panel">
+          <svg class="circular" height="40" width="40">
+              <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="6" stroke-miterlimit="10">
+              </circle>
+          </svg>
+      </div>
+    </ws-loading>
+
+    <!-- App root -->
+    <app-root></app-root>
+  </body>
+</html>

@@ -1,0 +1,23 @@
+<div class="flex flex-col items-center justify-center w-full h-full">
+  <div class="w-full max-w-3xl">
+    <div class="mx-auto prose-sm prose max-w-none">
+      <img class="w-20" src="assets/images/logo/logo.svg" alt="Logo image" />
+      <h1>登陆模块</h1>
+      <p>
+        这可以是应用程序的着陆页面或欢迎页面。如果你有一个SSR(服务器端渲染)设置，或者如果你不需要搜索引擎可见性和优化，你甚至可以使用这个页面作为你的主登录页面。
+      </p>
+      <p>
+        这是一个独立的“模块”，它有自己的目录和路由设置，而且它完全与实际的应用程序分离。这也是一个使用相同代码库的多个应用程序设置的简单示例。您可以有不同的入口点，本质上在相同的代码库中有不同的应用程序。
+      </p>
+    </div>
+    <div>
+      <a class="mt-8" mat-flat-button [color]="'primary'" [routerLink]="'/dashboards/project'">
+        <span>启动应用程序</span>
+        <mat-icon
+          class="ml-2 icon-size-5"
+          [svgIcon]="'heroicons_solid:arrow-narrow-right'"
+        ></mat-icon>
+      </a>
+    </div>
+  </div>
+</div>

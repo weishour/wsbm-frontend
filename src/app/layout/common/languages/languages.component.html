@@ -1,0 +1,28 @@
+<div dDropDown [trigger]="'hover'" (toggleEvent)="onToggle($event)" appendToBody>
+  <!-- 按钮 -->
+  <button mat-icon-button dDropDownToggle>
+    <ng-container *ngTemplateOutlet="flagImage; context: { $implicit: activeLang }"></ng-container>
+  </button>
+
+  <!-- 语言菜单 -->
+  <mat-selection-list dDropDownMenu #schemes [multiple]="false" dense>
+    <mat-list-option *ngFor="let lang of availableLangs; trackBy: trackByFn" (click)="setActiveLang(lang.id)">
+      <span class="flex items-center">
+        <ng-container *ngTemplateOutlet="flagImage; context: { $implicit: lang.id }"></ng-container>
+        <span class="ml-3">{{ lang.label }}</span>
+      </span>
+    </mat-list-option>
+  </mat-selection-list>
+</div>
+
+<!-- 国旗图片模板 -->
+<ng-template let-lang #flagImage>
+  <span class="relative w-6 overflow-hidden rounded-sm shadow">
+    <span class="absolute inset-0 ring-1 ring-inset ring-black ring-opacity-10"></span>
+    <img
+      class="w-full"
+      [src]="'assets/images/flags/' + flagCodes[lang].toUpperCase() + '.svg'"
+      [alt]="'Flag image for ' + lang"
+    />
+  </span>
+</ng-template>

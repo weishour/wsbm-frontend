@@ -1,0 +1,52 @@
+<div
+  class="ws-alert-container"
+  *ngIf="!dismissible || (dismissible && !dismissed)"
+  [@fadeIn]="!dismissed"
+  [@fadeOut]="!dismissed"
+>
+  <!-- 边框 -->
+  <div class="ws-alert-border" *ngIf="appearance === 'border'"></div>
+
+  <!-- 图标 -->
+  <div class="ws-alert-icon" *ngIf="showIcon">
+    <!-- 自定义图标 -->
+    <div class="ws-alert-custom-icon">
+      <ng-content select="[wsAlertIcon]"></ng-content>
+    </div>
+
+    <!-- 默认图标 -->
+    <div class="ws-alert-default-icon">
+      <mat-icon *ngIf="type === 'primary'" [svgIcon]="'heroicons_solid:check-circle'"></mat-icon>
+
+      <mat-icon *ngIf="type === 'accent'" [svgIcon]="'heroicons_solid:check-circle'"></mat-icon>
+
+      <mat-icon *ngIf="type === 'warn'" [svgIcon]="'heroicons_solid:x-circle'"></mat-icon>
+
+      <mat-icon *ngIf="type === 'basic'" [svgIcon]="'heroicons_solid:check-circle'"></mat-icon>
+
+      <mat-icon *ngIf="type === 'info'" [svgIcon]="'heroicons_solid:information-circle'"></mat-icon>
+
+      <mat-icon *ngIf="type === 'success'" [svgIcon]="'heroicons_solid:check-circle'"></mat-icon>
+
+      <mat-icon *ngIf="type === 'warning'" [svgIcon]="'heroicons_solid:exclamation'"></mat-icon>
+
+      <mat-icon *ngIf="type === 'error'" [svgIcon]="'heroicons_solid:x-circle'"></mat-icon>
+    </div>
+  </div>
+
+  <!-- 内容 -->
+  <div class="ws-alert-content">
+    <div class="ws-alert-title">
+      <ng-content select="[wsAlertTitle]"></ng-content>
+    </div>
+
+    <div class="ws-alert-message">
+      <ng-content></ng-content>
+    </div>
+  </div>
+
+  <!-- 关闭按钮 -->
+  <button class="ws-alert-dismiss-button" mat-icon-button (click)="dismiss()">
+    <mat-icon [svgIcon]="'heroicons_solid:x'"></mat-icon>
+  </button>
+</div>

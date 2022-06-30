@@ -1,0 +1,71 @@
+<div dDropDown [trigger]="'hover'" (toggleEvent)="onToggle($event)" appendToBody>
+  <!-- 按钮 -->
+  <button mat-icon-button dDropDownToggle>
+    <span class="relative">
+      <img class="rounded-full w-7 h-7" *ngIf="showAvatar && user.avatar" [src]="user.avatar" />
+      <mat-icon
+        *ngIf="!showAvatar || !user.avatar"
+        [svgIcon]="'heroicons_outline:user-circle'"
+      ></mat-icon>
+    </span>
+  </button>
+
+  <ws-card dDropDownMenu class="flex flex-col items-center p-8 py-6 w-80">
+    <div class="flex items-start w-full">
+      <img
+        class="w-16 h-16 mr-6 rounded-full cursor-pointer"
+        src="assets/images/avatars/ws.jpg"
+        alt="Card cover image"
+      />
+      <div class="flex flex-col">
+        <div class="text-2xl font-semibold leading-tight">{{ user.username }}</div>
+        <div class="leading-tight text-md text-primary">唯守专注，乐于分享</div>
+        <div class="text-md text-secondary">{{ user.email }}</div>
+      </div>
+    </div>
+    <div class="flex items-center justify-between w-full px-2 my-4">
+      <div class="flex flex-col items-center cursor-pointer">
+        <span class="font-bold">1.2k</span>
+        <span class="text-sm font-medium text-secondary">动态</span>
+      </div>
+      <div class="flex flex-col items-center cursor-pointer">
+        <span class="font-bold">200k</span>
+        <span class="text-sm font-medium text-secondary">粉丝</span>
+      </div>
+      <div class="flex flex-col items-center cursor-pointer">
+        <span class="font-bold">1.2k</span>
+        <span class="text-sm font-medium text-secondary">关注</span>
+      </div>
+    </div>
+    <ng-container *ngFor="let userMenu of userMenus">
+      <ng-container
+        *ngTemplateOutlet="userMenuList; context: { $implicit: userMenu }"
+      ></ng-container>
+    </ng-container>
+  </ws-card>
+</div>
+
+<!-- 用户列表菜单模板 -->
+<ng-template let-menu #userMenuList>
+  <button
+    *ngIf="menu.type === 'basic'; else dividerBlock"
+    class="px-2 rounded-md ws-button-list group"
+    mat-button
+    (click)="userMenuClick(menu.id)"
+  >
+    <div class="flex justify-between w-full">
+      <div class="flex items-center">
+        <mat-icon class="mr-3 icon-size-5 group-hover:text-primary" [svgIcon]="menu.icon"></mat-icon>
+        <span class="leading-none text-secondary group-hover:text-primary">{{ menu.name }}</span>
+      </div>
+      <mat-icon
+        class="icon-size-4 ws-icon-right group-hover:text-primary"
+        [svgIcon]="'heroicons_outline:chevron-right'"
+      ></mat-icon>
+    </div>
+  </button>
+</ng-template>
+
+<ng-template #dividerBlock>
+  <hr class="w-full my-1 border-t-0" />
+</ng-template>

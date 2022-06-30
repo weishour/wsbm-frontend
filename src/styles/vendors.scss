@@ -1,0 +1,26 @@
+/* ------------------------------------------------------------------------------ */
+/*  @ 在这里导入第三方库样式
+/* ------------------------------------------------------------------------------ */
+
+/* DevUI */
+@import '~ng-devui/styles-var/devui-var.scss';
+
+/* Perfect scrollbar */
+@import '~perfect-scrollbar/css/perfect-scrollbar.css';
+
+/* tippy */
+@import '~tippy.js/dist/tippy.css';
+@import '~tippy.js/themes/material.css';
+@import '~tippy.js/animations/scale.css';
+
+/* filepond */
+@import '~filepond/dist/filepond.min.css';
+@import '~filepond-plugin-file-poster/dist/filepond-plugin-file-poster.min.css';
+@import '~filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css';
+@import '~filepond-plugin-image-edit/dist/filepond-plugin-image-edit.min.css';
+
+/* pintura */
+@import '../assets/js/pintura/pintura.min.css';
+
+/* Quill */
+@import '~quill/dist/quill.snow.css';

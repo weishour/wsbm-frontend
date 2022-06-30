@@ -1,0 +1,93 @@
+/* Variables */
+:root {
+  --ws-vertical-navigation-thin-width: 80px;
+}
+
+ws-vertical-navigation {
+  /* Thin appearance overrides */
+  &.ws-vertical-navigation-appearance-thin {
+    width: var(--ws-vertical-navigation-thin-width);
+    min-width: var(--ws-vertical-navigation-thin-width);
+    max-width: var(--ws-vertical-navigation-thin-width);
+
+    /* Left positioned */
+    &.ws-vertical-navigation-position-left {
+      &.ws-vertical-navigation-mode-side {
+        margin-left: calc(var(--ws-vertical-navigation-thin-width) * -1);
+      }
+
+      &.ws-vertical-navigation-opened {
+        margin-left: 0;
+      }
+    }
+
+    /* Right positioned */
+    &.ws-vertical-navigation-position-right {
+      &.ws-vertical-navigation-mode-side {
+        margin-right: calc(var(--ws-vertical-navigation-thin-width) * -1);
+      }
+
+      &.ws-vertical-navigation-opened {
+        margin-right: 0;
+      }
+
+      .ws-vertical-navigation-aside-wrapper {
+        left: auto;
+        right: var(--ws-vertical-navigation-thin-width);
+      }
+    }
+
+    /* Wrapper */
+    .ws-vertical-navigation-wrapper {
+      /* Content */
+      .ws-vertical-navigation-content {
+        > ws-vertical-navigation-aside-item,
+        > ws-vertical-navigation-basic-item {
+          flex-direction: column;
+          justify-content: center;
+          height: 64px;
+          min-height: 64px;
+          max-height: 64px;
+          padding: 0 16px;
+
+          .ws-vertical-navigation-item-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            .ws-vertical-navigation-item {
+              justify-content: center;
+              padding: 12px;
+              border-radius: 4px;
+
+              .ws-vertical-navigation-item-icon {
+                margin: 0;
+              }
+
+              .ws-vertical-navigation-item-arrow,
+              .ws-vertical-navigation-item-badge-content,
+              .ws-vertical-navigation-item-title-wrapper {
+                display: none;
+              }
+            }
+          }
+        }
+
+        > ws-vertical-navigation-collapsable-item {
+          display: none;
+        }
+
+        > ws-vertical-navigation-group-item {
+          > .ws-vertical-navigation-item-wrapper {
+            display: none;
+          }
+        }
+      }
+    }
+
+    /* Aside wrapper */
+    .ws-vertical-navigation-aside-wrapper {
+      left: var(--ws-vertical-navigation-thin-width);
+    }
+  }
+}

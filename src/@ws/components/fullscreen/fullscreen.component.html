@@ -1,0 +1,11 @@
+<ng-container *transloco="let t; read: 'header'">
+  <!-- 按钮 -->
+  <button mat-icon-button [matTooltip]="tooltip || t(defaultTooltip)" (click)="toggleFullscreen()">
+    <ng-container [ngTemplateOutlet]="iconTpl || defaultIconTpl"></ng-container>
+  </button>
+
+  <!-- 默认图标 -->
+  <ng-template #defaultIconTpl>
+    <mat-icon [svgIcon]="defaultIcon"></mat-icon>
+  </ng-template>
+</ng-container>

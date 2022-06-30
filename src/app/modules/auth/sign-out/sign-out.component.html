@@ -1,0 +1,36 @@
+<ng-container *transloco="let t; scope: 'auth'">
+  <div class="flex flex-col items-center flex-auto min-w-0 sm:justify-center">
+    <div class="w-full px-4 py-8 sm:w-auto sm:p-12 sm:rounded-2xl sm:shadow sm:bg-card">
+        <div class="w-full mx-auto max-w-80 sm:w-80 sm:mx-0">
+          <!-- logo -->
+          <div class="w-12 mx-auto">
+            <ws-logo></ws-logo>
+          </div>
+
+          <!-- 标题 -->
+          <div class="mt-8 text-4xl font-extrabold leading-tight tracking-tight text-center">{{t('auth.have_signed_out')}}!</div>
+          <div class="flex justify-center mt-0.5 font-medium">
+              <!-- 重定向的倒计时 -->
+              <ng-container *ngIf="countdown > 0">
+                  <!-- Redirecting in {{countdown | i18nPlural: countdownMapping }} -->
+                  {{t('auth.redirecting_in', { value: countdown | i18nPlural: countdownMapping})}}
+              </ng-container>
+
+              <!-- 重定向消息 -->
+              <ng-container *ngIf="countdown === 0">
+                {{t('auth.now_being_redirected')}}!
+              </ng-container>
+          </div>
+
+          <!-- 表单尾部 -->
+          <div class="mt-8 font-medium text-center text-md text-secondary">
+              <span>{{t('auth.return_to')}}</span>
+              <a
+                  class="ml-1 text-primary-500 hover:underline"
+                  [routerLink]="['/sign-in']">{{t('auth.sign_in')}}
+              </a>
+          </div>
+        </div>
+    </div>
+  </div>
+</ng-container>

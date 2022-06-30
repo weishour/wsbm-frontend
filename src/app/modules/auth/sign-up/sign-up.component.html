@@ -1,0 +1,167 @@
+<ng-container *transloco="let t; scope: 'auth'">
+  <div class="fixed top-1 right-2">
+    <div class="flex items-start ml-auto space-x-0.5">
+      <schemes></schemes>
+      <languages></languages>
+    </div>
+  </div>
+  <div class="flex flex-col items-center flex-auto min-w-0 sm:justify-center md:p-8">
+    <div
+      class="flex overflow-hidden md:w-full md:max-w-6xl sm:rounded-2xl sm:shadow sm:bg-card"
+      @zoomIn
+    >
+      <div
+        class="relative items-center justify-center flex-auto hidden h-full p-16 overflow-hidden bg-gray-800 md:flex lg:px-28 dark:border-l"
+      >
+        <!-- Background - @formatter:off -->
+        <!-- Rings -->
+        <svg
+          class="absolute inset-0 pointer-events-none"
+          viewBox="0 0 960 540"
+          width="100%"
+          height="100%"
+          preserveAspectRatio="xMidYMax slice"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g class="text-gray-700 opacity-25" fill="none" stroke="currentColor" stroke-width="100">
+            <circle r="234" cx="196" cy="23"></circle>
+            <circle r="234" cx="760" cy="541"></circle>
+          </g>
+        </svg>
+        <!-- @formatter:on -->
+        <!-- Content -->
+        <div class="relative z-10 w-full max-w-2xl">
+          <div class="font-bold leading-none text-gray-100 text-7xl">
+            <div
+              [@fadeInBottom]="{
+                value: 'ture',
+                params: { duration: '525ms', curves: 'cubic-bezier(.35, 0, .36, 1.6)' }
+              }"
+            >
+              {{ t('auth.wsbm') }}
+            </div>
+          </div>
+          <div
+            class="mt-6 text-xl leading-6 text-gray-400"
+            [@fadeInRight]="{ value: 'ture', params: { delay: '300ms' } }"
+          >
+            {{ t('auth.wsbm_description') }}
+          </div>
+        </div>
+      </div>
+      <div class="w-full px-4 py-8 sm:w-auto sm:p-12 md:p-16" @stagger60>
+        <div class="w-full mx-auto max-w-80 sm:w-80 sm:mx-0">
+          <!-- Logo -->
+          <div class="w-48 mx-auto" @fadeIn>
+            <img class="drop-shadow-lg" src="assets/images/logo/weishour.svg" />
+          </div>
+
+          <!-- 注册表单 -->
+          <form class="mt-8" [formGroup]="signUpForm" #signUpNgForm="ngForm">
+            <!-- 名称 -->
+            <mat-form-field class="w-full" @fadeInLeft>
+              <mat-label>{{ t('auth.username') }}</mat-label>
+              <input id="username" matInput [formControlName]="'username'" />
+              <mat-error *ngIf="signUpForm.get('username').hasError('required')">
+                {{ t('auth.username_required') }}
+              </mat-error>
+            </mat-form-field>
+
+            <!-- 邮箱字段 -->
+            <mat-form-field class="w-full" @fadeInLeft>
+              <mat-label>{{ t('auth.email_address') }}</mat-label>
+              <input id="email" matInput [formControlName]="'email'" />
+              <mat-error *ngIf="signUpForm.get('email').hasError('required')">
+                {{ t('auth.email_address_required') }}
+              </mat-error>
+              <mat-error *ngIf="signUpForm.get('email').hasError('email')">
+                {{ t('auth.valid_email_address') }}
+              </mat-error>
+            </mat-form-field>
+
+            <!-- 密码字段 -->
+            <mat-form-field class="w-full" @fadeInLeft>
+              <mat-label>{{ t('auth.password') }}</mat-label>
+              <input
+                id="password"
+                matInput
+                type="password"
+                [formControlName]="'password'"
+                #passwordField
+              />
+              <button
+                mat-icon-button
+                type="button"
+                (click)="
+                  passwordField.type === 'password'
+                    ? (passwordField.type = 'text')
+                    : (passwordField.type = 'password')
+                "
+                matSuffix
+              >
+                <mat-icon
+                  class="icon-size-5"
+                  *ngIf="passwordField.type === 'password'"
+                  [svgIcon]="'heroicons_solid:eye'"
+                ></mat-icon>
+                <mat-icon
+                  class="icon-size-5"
+                  *ngIf="passwordField.type === 'text'"
+                  [svgIcon]="'heroicons_solid:eye-off'"
+                ></mat-icon>
+              </button>
+              <mat-error>
+                {{ t('auth.password_required') }}
+              </mat-error>
+            </mat-form-field>
+
+            <!-- 服务条款和隐私政策 -->
+            <div class="inline-flex items-end w-full mt-1.5" @fadeInLeft>
+              <mat-checkbox [color]="'primary'" [formControlName]="'agreements'">
+                <span>{{ t('auth.i_agree_to') }}</span>
+                <a class="ml-1 text-primary-500 hover:underline" [routerLink]="['./']">
+                  {{ t('auth.terms_service') }}
+                </a>
+                <span>{{ t('auth.and') }}</span>
+                <a class="ml-1 text-primary-500 hover:underline" [routerLink]="['./']">
+                  {{ t('auth.privacy_policy') }}
+                </a>
+              </mat-checkbox>
+            </div>
+
+            <!-- 提交按钮 -->
+            <button
+              class="w-full mt-6 ws-mat-button-large"
+              mat-flat-button
+              [color]="'primary'"
+              [disabled]="signUpForm.disabled"
+              (click)="signUp()"
+              @fadeInLeft
+            >
+              <span *ngIf="!signUpForm.disabled">
+                {{ t('auth.sign_up') }}
+              </span>
+              <mat-progress-spinner
+                *ngIf="signUpForm.disabled"
+                [diameter]="24"
+                [mode]="'indeterminate'"
+              >
+              </mat-progress-spinner>
+            </button>
+
+            <div class="flex items-center mt-6" @fadeInLeft>
+              <div class="flex-auto"></div>
+              <div class="flex items-baseline font-medium">
+                <div>{{ t('auth.already_have_account') }}?</div>
+                <a class="ml-1 text-primary-500 hover:underline" [routerLink]="['/sign-in']"
+                  >{{ t('auth.sign_in') }}
+                </a>
+              </div>
+              <div class="flex-auto"></div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

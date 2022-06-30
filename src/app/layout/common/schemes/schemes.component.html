@@ -1,0 +1,23 @@
+<ng-container *transloco="let t; read: 'settings'">
+  <div dDropDown [trigger]="'hover'" (toggleEvent)="onToggle($event)" appendToBody>
+    <!-- 按钮 -->
+    <button mat-icon-button dDropDownToggle>
+      <ng-container [ngTemplateOutlet]="defaultIconTpl"></ng-container>
+    </button>
+
+    <!-- 外观菜单 -->
+    <mat-selection-list dDropDownMenu #schemes [multiple]="false" dense>
+      <mat-list-option *ngFor="let scheme of availableSchemes; trackBy: trackByFn" (click)="setActiveScheme(scheme)">
+        <span class="flex items-center">
+          <mat-icon class="icon-size-5" [svgIcon]="iconCodes[scheme]"></mat-icon>
+          <span class="ml-1">{{t(scheme)}}</span>
+        </span>
+      </mat-list-option>
+    </mat-selection-list>
+  </div>
+
+  <!-- 默认图标 -->
+  <ng-template #defaultIconTpl>
+    <mat-icon class="icon-size-5" [svgIcon]="iconCodes[activeScheme]"></mat-icon>
+  </ng-template>
+</ng-container>

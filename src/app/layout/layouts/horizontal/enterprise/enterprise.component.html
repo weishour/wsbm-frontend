@@ -1,0 +1,94 @@
+<!-- 加载栏 -->
+<ws-loading-bar></ws-loading-bar>
+
+<!-- 导航 -->
+<ng-container *ngIf="isScreenSmall">
+  <ws-vertical-navigation
+    class="bg-gray-900 dark print:hidden"
+    [mode]="'over'"
+    [name]="'mainNavigation'"
+    [navigation]="navigation.default"
+    [opened]="false"
+  >
+    <!-- 导航头部钩子 -->
+    <ng-container wsVerticalNavigationContentHeader>
+      <!-- logo -->
+      <div class="flex items-center h-20 px-8 pt-6">
+        <img class="w-24" src="assets/images/logo/weishour.svg" alt="Logo image" />
+      </div>
+    </ng-container>
+  </ws-vertical-navigation>
+</ng-container>
+
+<!-- 包装 -->
+<div class="flex flex-col items-center flex-auto w-full min-w-0 bg-gray-200 dark:bg-card">
+  <!-- 头部 -->
+  <div
+    class="relative flex flex-col justify-center w-full h-16 overflow-hidden shadow flex-0 sm:h-20 md:h-36 z-49 dark:shadow-none print:hidden"
+  >
+    <!-- 顶部工具栏 -->
+    <div
+      class="relative flex justify-center flex-auto w-full px-4 bg-gray-800 dark md:px-8 dark:bg-gray-900"
+    >
+      <div class="flex items-center w-full h-16 max-w-360 sm:h-20">
+        <!-- logo -->
+        <ng-container *ngIf="!isScreenSmall">
+          <div class="flex items-center">
+            <img class="w-24" src="assets/images/logo/weishour.svg" alt="Logo image" />
+          </div>
+        </ng-container>
+        <!-- 导航切换按钮 -->
+        <ng-container *ngIf="isScreenSmall">
+          <button mat-icon-button (click)="toggleNavigation('mainNavigation')">
+            <mat-icon [svgIcon]="'heroicons_outline:menu'"></mat-icon>
+          </button>
+        </ng-container>
+        <!-- 组件 -->
+        <div class="flex items-center pl-2 ml-auto space-x-0.5 sm:space-x-2">
+          <languages></languages>
+          <ws-fullscreen class="hidden md:block"></ws-fullscreen>
+          <search [appearance]="'bar'"></search>
+          <shortcuts></shortcuts>
+          <messages></messages>
+          <notifications></notifications>
+          <!-- <button class="lg:hidden" mat-icon-button (click)="quickChat.toggle()">
+            <mat-icon [svgIcon]="'heroicons_outline:chat-alt-2'"></mat-icon>
+          </button> -->
+          <user></user>
+        </div>
+      </div>
+    </div>
+    <!-- 底部栏 -->
+    <ng-container *ngIf="!isScreenSmall">
+      <div class="flex justify-center flex-auto px-4 md:px-8 bg-card dark:bg-gray-700">
+        <div class="relative flex items-center w-full h-16 max-w-360">
+          <ws-horizontal-navigation
+            class="-mx-4"
+            [name]="'mainNavigation'"
+            [navigation]="navigation.horizontal"
+          ></ws-horizontal-navigation>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- 内容 -->
+  <div class="flex justify-center flex-auto w-full sm:p-6 md:p-8">
+    <div
+      class="flex flex-col flex-auto w-full sm:max-w-360 sm:shadow-lg sm:rounded-lg sm:overflow-hidden bg-default"
+    >
+      <!-- *ngIf="true"需要在这里放置为了router-outlet正常工作。
+           否则，布局的改变将不会被注册，视图也不会被更新! -->
+      <router-outlet *ngIf="true"></router-outlet>
+    </div>
+  </div>
+
+  <!-- 尾部 -->
+  <div
+    class="relative flex justify-center w-full px-6 border-t flex-0 md:px-8 z-49 bg-card print:hidden"
+  >
+    <div class="flex items-center w-full max-w-360 h-14 sm:h-20">
+      <span class="font-medium text-secondary">Ws &copy; {{ currentYear }}</span>
+    </div>
+  </div>
+</div>

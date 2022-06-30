@@ -1,0 +1,5 @@
+### 国旗的主存储库 ###
+https://github.com/Yummygum/flagpack-core
+
+### 我们此处使用了中等大小的SVG ###
+https://github.com/Yummygum/flagpack-core/tree/main/svg/m
